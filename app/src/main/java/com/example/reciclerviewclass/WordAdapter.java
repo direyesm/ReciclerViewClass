@@ -15,9 +15,12 @@ import java.util.List;
 public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder> {
 
     private List<String> wordList;
+    private PassElementSelected mListener;
 
-    public  WordAdapter(List<String> wordList){
+    public  WordAdapter(List<String> wordList, PassElementSelected mElementSelected){
         this.wordList = wordList;
+        mListener = mElementSelected;
+
     }
 
     @NonNull
@@ -40,15 +43,27 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder
     }
 
 
-    public class WordViewHolder extends RecyclerView.ViewHolder{
+    public class WordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView textView;
 
         public WordViewHolder(@NonNull WordItemLayoutBinding mBinding) {
             super(mBinding.getRoot());
             textView = mBinding.wordTv;
+            itemView.setOnClickListener(this);
 
         }
+
+        @Override
+        public void onClick(View view) {
+            int position = getLayoutPosition();
+            String element = wordList.get(position);
+            mListener.passElement(element);
+        }
+    }
+
+    public  interface PassElementSelected {
+        void passElement (String word);
     }
 
 }
